@@ -1,13 +1,14 @@
 # Shift8 ScrollShot
 
+**Version:** 1.0.0
+**Requires WordPress:** 5.8+
+**Requires PHP:** 7.4+
+**Tested up to:** WordPress 6.8
+**License:** GPL-2.0-or-later
+
 A WordPress plugin that creates a scrolling tall-screenshot viewport effect. A tall image is clipped by a fixed-height viewport and animates vertically inside it, giving the appearance of someone scrolling through a webpage.
 
 Works with any theme, page builder, or hand-coded HTML.
-
-## Requirements
-
-- WordPress 5.8+
-- PHP 7.4+
 
 ## Installation
 
