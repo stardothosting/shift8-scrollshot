@@ -93,8 +93,8 @@ class PluginTest extends TestCase {
 		$plugin = \Shift8_ScrollShot_Plugin::get_instance();
 		$plugin->enqueue_assets();
 
-		$this->assertStringContainsString( 'assets/css/scrollshot.css', $enqueued['style_url'] );
-		$this->assertStringContainsString( 'assets/js/scrollshot.js', $enqueued['script_url'] );
+		$this->assertStringContainsString( 'frontend-assets/css/scrollshot.css', $enqueued['style_url'] );
+		$this->assertStringContainsString( 'frontend-assets/js/scrollshot.js', $enqueued['script_url'] );
 	}
 
 	public function test_enqueue_assets_has_no_dependencies(): void {
@@ -142,13 +142,13 @@ class PluginTest extends TestCase {
 
 	public function test_css_file_exists(): void {
 		$this->assertFileExists(
-			dirname( __DIR__, 2 ) . '/assets/css/scrollshot.css'
+			dirname( __DIR__, 2 ) . '/frontend-assets/css/scrollshot.css'
 		);
 	}
 
 	public function test_js_file_exists(): void {
 		$this->assertFileExists(
-			dirname( __DIR__, 2 ) . '/assets/js/scrollshot.js'
+			dirname( __DIR__, 2 ) . '/frontend-assets/js/scrollshot.js'
 		);
 	}
 

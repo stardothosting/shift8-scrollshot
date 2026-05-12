@@ -40,14 +40,14 @@ final class Shift8_ScrollShot_Plugin {
 	public function enqueue_assets(): void {
 		wp_enqueue_style(
 			'shift8-scrollshot',
-			SHIFT8_SCROLLSHOT_URL . 'assets/css/scrollshot.css',
+			SHIFT8_SCROLLSHOT_URL . 'frontend-assets/css/scrollshot.css',
 			array(),
 			SHIFT8_SCROLLSHOT_VERSION
 		);
 
 		wp_enqueue_script(
 			'shift8-scrollshot',
-			SHIFT8_SCROLLSHOT_URL . 'assets/js/scrollshot.js',
+			SHIFT8_SCROLLSHOT_URL . 'frontend-assets/js/scrollshot.js',
 			array(),
 			SHIFT8_SCROLLSHOT_VERSION,
 			array(

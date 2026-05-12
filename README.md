@@ -1,6 +1,6 @@
 # Shift8 ScrollShot
 
-**Version:** 1.0.0
+**Version:** 1.0.1
 **Requires WordPress:** 5.8+
 **Requires PHP:** 7.4+
 **Tested up to:** WordPress 6.9
@@ -123,7 +123,7 @@ shift8-scrollshot/
   shift8-scrollshot.php          # Plugin bootstrap, constants, autoload
   includes/
     class-plugin.php             # Singleton class, frontend asset enqueueing
-  assets/
+  frontend-assets/
     css/scrollshot.css            # Viewport, frame, reduced-motion styles
     js/scrollshot.js              # Frontend controller
   languages/
@@ -149,7 +149,7 @@ composer install
 
 ### CSS and JS
 
-Edit files in `assets/css/` and `assets/js/` directly. After modifying assets, bump the version constant in `shift8-scrollshot.php` to bust browser caches.
+Edit files in `frontend-assets/css/` and `frontend-assets/js/` directly. Keep the top-level `assets/` directory free for WordPress.org plugin page banners, icons, and screenshots. After modifying frontend assets, bump the version constant in `shift8-scrollshot.php` to bust browser caches.
 
 ## License
 
