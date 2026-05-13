@@ -65,15 +65,12 @@ class PluginTest extends TestCase {
 		$this->assertArrayHasKey( 'style', $enqueued );
 		$this->assertArrayHasKey( 'script', $enqueued );
 
-		// Handle: shift8-scrollshot
 		$this->assertSame( 'shift8-scrollshot', $enqueued['style'][0] );
 		$this->assertSame( 'shift8-scrollshot', $enqueued['script'][0] );
 
-		// Version matches constant
 		$this->assertSame( SHIFT8_SCROLLSHOT_VERSION, $enqueued['style'][3] );
 		$this->assertSame( SHIFT8_SCROLLSHOT_VERSION, $enqueued['script'][3] );
 
-		// Script loaded in footer with defer strategy
 		$this->assertIsArray( $enqueued['script'][4] );
 		$this->assertTrue( $enqueued['script'][4]['in_footer'] );
 		$this->assertSame( 'defer', $enqueued['script'][4]['strategy'] );
@@ -117,7 +114,7 @@ class PluginTest extends TestCase {
 
 	public function test_version_constant_is_defined(): void {
 		$this->assertTrue( defined( 'SHIFT8_SCROLLSHOT_VERSION' ) );
-		$this->assertSame( '1.0.0', SHIFT8_SCROLLSHOT_VERSION );
+		$this->assertSame( '1.0.2', SHIFT8_SCROLLSHOT_VERSION );
 	}
 
 	public function test_path_constant_is_defined(): void {

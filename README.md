@@ -1,14 +1,12 @@
 # Shift8 ScrollShot
 
-**Version:** 1.0.1
+**Version:** 1.0.2
 **Requires WordPress:** 5.8+
 **Requires PHP:** 7.4+
 **Tested up to:** WordPress 6.9
 **License:** GPL-2.0-or-later
 
-A WordPress plugin that creates a scrolling tall-screenshot viewport effect. A tall image is clipped by a fixed-height viewport and animates vertically inside it, giving the appearance of someone scrolling through a webpage.
-
-Works with any theme, page builder, or hand-coded HTML.
+A WordPress plugin for displaying tall screenshots inside a fixed-height scrolling frame.
 
 ## Installation
 
@@ -17,12 +15,12 @@ Works with any theme, page builder, or hand-coded HTML.
 
 ## Quick Start
 
-1. Add a container element (div, section, or page builder container). Give it the CSS class `s8-scrollshot`.
-2. Inside the container, add an image element. Give it the CSS class `s8-scrollshot__image`.
+1. Add a container element with the CSS class `s8-scrollshot`.
+2. Add an image inside it with the CSS class `s8-scrollshot__image`.
 3. Use a tall image (for example, a full-page screenshot).
 4. Optionally add data attributes to the container or image to configure behavior.
 
-The plugin automatically detects elements with these classes and applies the scroll effect.
+The plugin finds matching elements on the frontend and applies the effect.
 
 ### Plain HTML Example
 
@@ -41,7 +39,7 @@ The plugin automatically detects elements with these classes and applies the scr
 
 ### Page Builder Usage
 
-In Bricks Builder, Elementor, or other visual builders:
+In visual builders such as Bricks or Elementor:
 
 1. Add a container/section element and apply the CSS class `s8-scrollshot`.
 2. Add an image element inside it and apply the CSS class `s8-scrollshot__image`.
@@ -49,31 +47,31 @@ In Bricks Builder, Elementor, or other visual builders:
 
 ## How It Works
 
-The plugin scans the page for `.s8-scrollshot` wrappers on DOMContentLoaded. For each wrapper, it:
+On DOMContentLoaded, the script scans for `.s8-scrollshot` wrappers. For each wrapper, it:
 
 1. Locates the `.s8-scrollshot__image` inside it.
 2. Reads configuration from `data-*` attributes on the wrapper and image.
-3. Injects a `.s8-scrollshot__viewport` div with overflow hidden and a fixed height.
+3. Adds a `.s8-scrollshot__viewport` wrapper when one is not already present.
 4. Measures the image and calculates the maximum vertical travel distance.
 5. Starts the chosen animation mode (auto or scroll-linked).
 
-Animations only run when the element is visible in the browser viewport (via IntersectionObserver). The image is moved using `transform: translateY()` for GPU-accelerated rendering.
+Animations pause when the element leaves the browser viewport. Image movement uses `transform: translateY()`.
 
 ## Data Attributes
 
 Configuration is done entirely through HTML data attributes. Place them on the outer `.s8-scrollshot` container or on the `.s8-scrollshot__image` element. If the same attribute exists on both, the wrapper value wins.
 
-| Attribute              | Type    | Default        | Description                                         |
-|------------------------|---------|----------------|-----------------------------------------------------|
-| `data-mode`            | string  | `auto`         | `auto` for looping animation, `scroll` for scroll-linked |
-| `data-duration`        | integer | `12000`        | Total cycle time in milliseconds (auto mode)        |
-| `data-end-pause`       | integer | `1500`         | Hold time at top and bottom in ms (auto mode)       |
-| `data-pause-on-hover`  | boolean | `true`         | Pause auto animation on mouse hover                 |
-| `data-reverse`         | boolean | `true`         | Bounce back to top after reaching bottom             |
-| `data-frame`           | string  | `none`         | `browser` adds a chrome bar with traffic-light dots  |
-| `data-viewport-height` | integer | `700`          | Visible viewport height in pixels                   |
-| `data-viewport-width`  | integer | `0`            | Viewport width in pixels. 0 = fill container width  |
-| `data-easing`          | string  | `ease-in-out`  | CSS easing function for motion segments              |
+| Attribute              | Type    | Default       | Description                                              |
+|------------------------|---------|---------------|----------------------------------------------------------|
+| `data-mode`            | string  | `auto`        | `auto` for looping animation, `scroll` for scroll-linked |
+| `data-duration`        | integer | `12000`       | Total cycle time in milliseconds (auto mode)             |
+| `data-end-pause`       | integer | `1500`        | Hold time at top and bottom in ms (auto mode)            |
+| `data-pause-on-hover`  | boolean | `true`        | Pause auto animation on mouse hover                      |
+| `data-reverse`         | boolean | `true`        | Bounce back to top after reaching bottom                 |
+| `data-frame`           | string  | `none`        | `browser` adds a chrome bar with traffic-light dots      |
+| `data-viewport-height` | integer | `700`         | Visible viewport height in pixels                        |
+| `data-viewport-width`  | integer | `0`           | Viewport width in pixels. 0 = fill container width       |
+| `data-easing`          | string  | `ease-in-out` | CSS easing function for motion segments                  |
 
 ## Modes
 
@@ -89,7 +87,7 @@ Set `data-mode="scroll"` to tie the image position to the page scroll. As the vi
 
 ## Browser Frame
 
-Set `data-frame="browser"` to add a simple browser-style chrome bar above the viewport with three colored dots (close, minimize, maximize). The frame is rendered with CSS only, no image assets required.
+Set `data-frame="browser"` to add a small browser-style chrome bar above the viewport. The frame is rendered with CSS.
 
 ## Controlling Width
 
@@ -109,16 +107,16 @@ For best image quality, use the full-size image rather than a scaled-down thumbn
 
 ## Performance
 
-- Vanilla JavaScript, no jQuery or third-party libraries.
+- Vanilla JavaScript with no jQuery dependency.
 - Animations use `transform: translateY()` with `will-change` for GPU compositing.
 - IntersectionObserver pauses animations when the element is off-screen.
 - Scroll mode uses `requestAnimationFrame` with a single passive scroll listener.
 - Resize handling is debounced.
-- Assets are only ~4 KB combined and the JS exits immediately if no matching elements are found.
+- The script exits early if no matching elements are found.
 
 ## Plugin Structure
 
-```
+```text
 shift8-scrollshot/
   shift8-scrollshot.php          # Plugin bootstrap, constants, autoload
   includes/
@@ -150,6 +148,21 @@ composer install
 ### CSS and JS
 
 Edit files in `frontend-assets/css/` and `frontend-assets/js/` directly. Keep the top-level `assets/` directory free for WordPress.org plugin page banners, icons, and screenshots. After modifying frontend assets, bump the version constant in `shift8-scrollshot.php` to bust browser caches.
+
+## Changelog
+
+### 1.0.2
+
+- Harden data attribute parsing and animation setup.
+
+### 1.0.1
+
+- Move runtime CSS and JavaScript to `frontend-assets`.
+- Add WordPress.org plugin page assets.
+
+### 1.0.0
+
+- Initial release.
 
 ## License
 

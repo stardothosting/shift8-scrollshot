@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Shift8 ScrollShot
  * Description: Scrolling tall-screenshot viewport effect. Add the class s8-scrollshot to a container and s8-scrollshot__image to an image inside it.
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      Shift8 Web
  * Author URI:  https://shift8web.ca
  * License:     GPL-2.0-or-later
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SHIFT8_SCROLLSHOT_VERSION', '1.0.0' );
+define( 'SHIFT8_SCROLLSHOT_VERSION', '1.0.2' );
 define( 'SHIFT8_SCROLLSHOT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SHIFT8_SCROLLSHOT_URL', plugin_dir_url( __FILE__ ) );
 define( 'SHIFT8_SCROLLSHOT_BASENAME', plugin_basename( __FILE__ ) );

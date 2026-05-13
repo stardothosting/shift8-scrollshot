@@ -5,27 +5,25 @@ Tags: scrollshot, screenshot, animation, scroll, viewport
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Scrolling tall-screenshot viewport effect. Makes a tall image appear to scroll inside a fixed-height container.
+Display tall screenshots inside a fixed-height scrolling frame.
 
 == Description ==
 
-Shift8 ScrollShot creates a scrolling screenshot viewport effect. Drop a tall image inside a container, add two CSS classes, and the plugin handles the rest. Works with any theme, page builder, or hand-coded HTML.
+Shift8 ScrollShot turns a tall image into a scrolling screenshot preview. Add the wrapper and image classes, then adjust the behavior with data attributes. It works in regular templates, block markup, and most page builders.
 
 **Features:**
 
-* Auto-scroll mode: the image scrolls up and down automatically on a loop
-* Scroll-linked mode: image position follows the page scroll
-* Configurable pause at top and bottom of the scroll cycle
+* Automatic loop or scroll-linked movement
+* Configurable pause timing
 * Optional browser-style frame with traffic-light dots
 * Per-instance configuration via data attributes
 * Multiple independent instances on one page
 * Respects `prefers-reduced-motion`
-* Vanilla JS with no jQuery or external libraries
-* Lightweight assets (under 5 KB combined)
+* No jQuery dependency
 
 == Installation ==
 
@@ -34,15 +32,15 @@ Shift8 ScrollShot creates a scrolling screenshot viewport effect. Drop a tall im
 
 == Usage ==
 
-1. Add a container element (a div, section, or page builder container). Give it the CSS class `s8-scrollshot`.
-2. Inside that container, add an image element. Give it the CSS class `s8-scrollshot__image`.
+1. Add a container element and give it the CSS class `s8-scrollshot`.
+2. Add an image inside that container and give the image the CSS class `s8-scrollshot__image`.
 3. (Optional) Add data attributes to the container or image to configure the behavior.
 
 Data attributes can be placed on either the wrapper or the image. If the same attribute appears on both, the wrapper value takes priority.
 
 = Page Builder Setup =
 
-In Bricks Builder, Elementor, or other visual builders:
+In visual builders such as Bricks or Elementor:
 
 1. Add a container or section element and apply the CSS class `s8-scrollshot`.
 2. Add an image element inside it and apply the CSS class `s8-scrollshot__image`.
@@ -80,11 +78,11 @@ Yes. Each `.s8-scrollshot` instance is independent.
 
 = What happens if my image is shorter than the viewport? =
 
-The plugin detects this and does nothing. No errors are thrown.
+The image stays static.
 
 = How do I control the width? =
 
-Set a width on the container element, or use the `data-viewport-width` attribute with a pixel value. The image fills the viewport width automatically.
+Set a width on the container element, or use the `data-viewport-width` attribute with a pixel value. The image fills the viewport width by default.
 
 = How do I make the scroll slower? =
 
@@ -92,10 +90,23 @@ Increase `data-duration`. For a slow scroll, try `15000` or `20000` (15-20 secon
 
 == Changelog ==
 
+= 1.0.2 =
+* Harden data attribute parsing and animation setup.
+
+= 1.0.1 =
+* Move runtime CSS and JavaScript to `frontend-assets`.
+* Add WordPress.org plugin page assets.
+
 = 1.0.0 =
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Improves frontend data attribute handling.
+
+= 1.0.1 =
+No action required.
 
 = 1.0.0 =
 Initial release.

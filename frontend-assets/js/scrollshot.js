@@ -1,11 +1,3 @@
-/**
- * Shift8 ScrollShot
- *
- * Vanilla JS, no dependencies. Supports auto-scroll and scroll-linked
- * modes with per-instance configuration via data-* attributes.
- *
- * @package Shift8_ScrollShot
- */
 ( function () {
 	'use strict';
 
@@ -35,9 +27,6 @@
 		return Math.min( Math.max( val, min ), max );
 	}
 
-	/* ------------------------------------------------------------------ */
-	/* ScrollShot controller                                               */
-	/* ------------------------------------------------------------------ */
 	function ScrollShot( el ) {
 		this.wrapper  = el;
 		this.image    = null;
@@ -99,10 +88,7 @@
 	};
 
 	/**
-	 * Read data-* attributes from the wrapper and the image. Wrapper
-	 * values take priority, then image values, then built-in defaults.
-	 * This supports page builders where attributes may be placed on
-	 * either the container or the image element.
+	 * Wrapper attributes override image attributes.
 	 */
 	ScrollShot.prototype.readSettings = function () {
 		var imgD  = this.image ? this.image.dataset : {};
@@ -119,10 +105,26 @@
 			return v !== undefined ? v : fallback;
 		}
 
-		function num( key, fallback ) {
+		function choice( key, fallback, allowed ) {
+			var v = str( key, fallback );
+			return allowed.indexOf( v ) !== -1 ? v : fallback;
+		}
+
+		function timing( key, fallback ) {
+			var v = str( key, fallback );
+			if ( typeof CSS !== 'undefined' && CSS.supports && ! CSS.supports( 'animation-timing-function', v ) ) {
+				return fallback;
+			}
+			return v;
+		}
+
+		function num( key, fallback, min, max ) {
 			var v = attr( key );
 			var n = parseInt( v, 10 );
-			return isNaN( n ) ? fallback : n;
+			if ( ! isFinite( n ) ) {
+				return fallback;
+			}
+			return clamp( n, min, max );
 		}
 
 		function bool( key, fallback ) {
@@ -133,15 +135,15 @@
 		}
 
 		this.settings = {
-			mode:           str(  'mode',           DEFAULTS.mode ),
-			duration:       num(  'duration',       DEFAULTS.duration ),
-			pauseOnHover:   bool( 'pauseOnHover',   DEFAULTS.pauseOnHover ),
-			reverse:        bool( 'reverse',         DEFAULTS.reverse ),
-			frame:          str(  'frame',           DEFAULTS.frame ),
-			viewportHeight: num(  'viewportHeight',  DEFAULTS.viewportHeight ),
-			viewportWidth:  num(  'viewportWidth',   DEFAULTS.viewportWidth ),
-			endPause:       num(  'endPause',        DEFAULTS.endPause ),
-			easing:         str(  'easing',          DEFAULTS.easing ),
+			mode:           choice( 'mode',          DEFAULTS.mode, [ 'auto', 'scroll' ] ),
+			duration:       num(    'duration',      DEFAULTS.duration, 1, 600000 ),
+			pauseOnHover:   bool(   'pauseOnHover',  DEFAULTS.pauseOnHover ),
+			reverse:        bool(   'reverse',       DEFAULTS.reverse ),
+			frame:          choice( 'frame',         DEFAULTS.frame, [ 'none', 'browser' ] ),
+			viewportHeight: num(    'viewportHeight', DEFAULTS.viewportHeight, 1, 10000 ),
+			viewportWidth:  num(    'viewportWidth', DEFAULTS.viewportWidth, 0, 10000 ),
+			endPause:       num(    'endPause',      DEFAULTS.endPause, 0, 600000 ),
+			easing:         timing( 'easing',        DEFAULTS.easing ),
 		};
 	};
 
@@ -178,16 +180,16 @@
 			if ( ! this.wrapper.querySelector( '.s8-scrollshot__chrome' ) ) {
 				var chrome = document.createElement( 'div' );
 				chrome.className = 's8-scrollshot__chrome';
-				chrome.innerHTML = '<span></span><span></span><span></span>';
+				for ( var i = 0; i < 3; i++ ) {
+					chrome.appendChild( document.createElement( 'span' ) );
+				}
 				this.wrapper.insertBefore( chrome, this.viewport );
 			}
 		}
 	};
 
 	/**
-	 * Calculate maximum vertical travel. Uses the aspect ratio and
-	 * rendered width rather than offsetHeight, because parent overflow
-	 * or page builder image styles may constrain the layout height.
+	 * Calculate travel from the image ratio and rendered width.
 	 */
 	ScrollShot.prototype.measure = function () {
 		if ( ! this.image || ! this.image.naturalWidth ) {
@@ -226,9 +228,7 @@
 	};
 
 	/**
-	 * Auto mode: animate the image up and down on a loop using the
-	 * Web Animations API. Keyframes include hold segments at each end
-	 * controlled by the endPause setting.
+	 * Auto mode uses Web Animations keyframes with optional holds.
 	 */
 	ScrollShot.prototype.setupAutoMode = function () {
 		var s      = this.settings;
@@ -260,11 +260,15 @@
 			];
 		}
 
-		this._animation = this.image.animate( keyframes, {
-			duration:   s.duration,
-			easing:     'linear',
-			iterations: Infinity,
-		} );
+		try {
+			this._animation = this.image.animate( keyframes, {
+				duration:   s.duration,
+				easing:     'linear',
+				iterations: Infinity,
+			} );
+		} catch ( e ) {
+			return;
+		}
 
 		if ( ! this._visible ) {
 			this._animation.pause();
@@ -349,9 +353,6 @@
 		}
 	};
 
-	/* ------------------------------------------------------------------ */
-	/* Boot                                                                */
-	/* ------------------------------------------------------------------ */
 	function boot() {
 		var wrappers = document.querySelectorAll( '.s8-scrollshot' );
 		if ( ! wrappers.length ) return;

@@ -1,11 +1,6 @@
 <?php
 /**
- * Core plugin class. Handles asset enqueueing for the frontend.
- *
- * Some page builders store content as serialized data in postmeta, so
- * we cannot reliably inspect post_content for the marker class. Assets
- * are enqueued unconditionally on the frontend (they are small) and the
- * JS exits immediately when no .s8-scrollshot elements exist on the page.
+ * Core plugin class.
  *
  * @package Shift8_ScrollShot
  */
@@ -33,9 +28,8 @@ final class Shift8_ScrollShot_Plugin {
 	/**
 	 * Enqueue frontend CSS and JS.
 	 *
-	 * We intentionally skip is_admin() checks because wp_enqueue_scripts
-	 * only fires on the frontend. Assets are lightweight (~3 KB combined)
-	 * and the JS bails out instantly if no matching DOM nodes are found.
+	 * Assets are small and page builders may store content outside post_content,
+	 * so marker-class detection is handled in the browser.
 	 */
 	public function enqueue_assets(): void {
 		wp_enqueue_style(
